@@ -93,9 +93,32 @@ let endangeredSpeciesData = {
 // - sends back the the "Amazon Rainforest" region object when the client goes to /region/1
 // - EXTRA CREDIT: modify your region route handler to send any region using the dynamic parameter region/{index}
 // - sends back a 404 page for all other paths
+app.use((request, response, next) => {
+    console.log(request.method + "/" + request.url)
+    next();
+})
+
+app.get("/", (request, response) => {
+	response.send("Explore data on endangered species, their habitats, threats, and conservation efforts.")
+})
+
+app.get("/species", (request, response) => {
+	response.json(endangeredSpeciesData.species)
+})
+
+app.get("/conservation", (request, response) => {
+	response.json(endangeredSpeciesData.conservation_efforts)
+})
 
 
+app.get("/region/:id", (request, response) => {
+    const index = request.params.id
+response.json(endangeredSpeciesData.regions_at_risk[index])
+})
 
+app.use((request, response, ) => {
+	response.status(404).send("404 NOT FOUND")
+})
 
 
 app.listen(3000, () => {
